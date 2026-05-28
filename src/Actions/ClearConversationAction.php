@@ -27,7 +27,7 @@ final class ClearConversationAction
             ->first();
 
         $participantRow->update([
-            'cleared_at' => $latestMessage?->created_at ?? now(),
+            'cleared_at' => $latestMessage !== null ? $latestMessage->created_at : now(),
             'unread_count' => 0,
             'last_read_message_id' => null,
             'manually_marked_unread_at' => null,

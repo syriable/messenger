@@ -52,7 +52,7 @@ final class MessageSentBroadcast implements ShouldBroadcast
                 'conversation_id' => $message->conversation_id,
                 'body' => $message->body,
                 'reply_to_message_id' => $message->reply_to_message_id,
-                'created_at' => $message->created_at?->toIso8601String(),
+                'created_at' => $message->created_at->toIso8601String(),
             ],
             'conversation' => [
                 'id' => $this->domainEvent->conversation->id,

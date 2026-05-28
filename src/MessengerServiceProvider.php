@@ -64,7 +64,7 @@ class MessengerServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        $this->app->singleton('messenger', static fn (): MessengerManager => new MessengerManager);
+        $this->app->singleton('messenger', static fn ($app): MessengerManager => new MessengerManager($app));
 
         $this->app->alias('messenger', MessengerManager::class);
 

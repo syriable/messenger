@@ -31,10 +31,6 @@ final class AttachmentStorage
         $attachments = collect();
 
         foreach ($files as $file) {
-            if (! $file instanceof UploadedFile) {
-                throw new \InvalidArgumentException('Each attachment must be an instance of '.UploadedFile::class.'.');
-            }
-
             $this->attachmentValidator->validateFile($file);
 
             $originalFilename = $this->sanitizeFilename($file->getClientOriginalName());

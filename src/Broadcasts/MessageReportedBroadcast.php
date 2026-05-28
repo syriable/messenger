@@ -50,7 +50,7 @@ final class MessageReportedBroadcast implements ShouldBroadcast
                 'id' => $report->id,
                 'message_id' => $report->message_id,
                 'reason' => $report->reason,
-                'created_at' => $report->created_at?->toIso8601String(),
+                'created_at' => $report->created_at->toIso8601String(),
             ],
             'message' => [
                 'id' => $message->id,
