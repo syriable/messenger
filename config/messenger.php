@@ -79,7 +79,7 @@ return [
 
     'broadcasting' => [
         'enabled' => env('MESSENGER_BROADCASTING_ENABLED', false),
-        'channel_prefix' => 'messenger',
+        'channel_prefix' => env('MESSENGER_BROADCASTING_CHANNEL_PREFIX', 'messenger'),
     ],
 
     /*

@@ -4,9 +4,18 @@ declare(strict_types=1);
 
 namespace Syriable\Messenger;
 
+use Illuminate\Support\Facades\Event;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Syriable\Messenger\Contracts\PreSendPipe;
+use Syriable\Messenger\Events\ConversationArchived;
+use Syriable\Messenger\Events\ConversationCleared;
+use Syriable\Messenger\Events\ConversationMarkedAsRead;
+use Syriable\Messenger\Events\MessageSent;
+use Syriable\Messenger\Listeners\BroadcastConversationArchived;
+use Syriable\Messenger\Listeners\BroadcastConversationCleared;
+use Syriable\Messenger\Listeners\BroadcastConversationMarkedAsRead;
+use Syriable\Messenger\Listeners\BroadcastMessageSent;
 use Syriable\Messenger\Pipelines\PreSend\EnsureMessagingAllowedPipe;
 use Syriable\Messenger\Pipelines\PreSend\ValidateAttachmentsPipe;
 use Syriable\Messenger\Pipelines\PreSend\ValidateMessageContentPipe;
@@ -67,5 +76,13 @@ class MessengerServiceProvider extends PackageServiceProvider
 
             return new PreSendPipeline($app, $pipes);
         });
+    }
+
+    public function packageBooted(): void
+    {
+        Event::listen(MessageSent::class, BroadcastMessageSent::class);
+        Event::listen(ConversationArchived::class, BroadcastConversationArchived::class);
+        Event::listen(ConversationMarkedAsRead::class, BroadcastConversationMarkedAsRead::class);
+        Event::listen(ConversationCleared::class, BroadcastConversationCleared::class);
     }
 }
