@@ -11,10 +11,20 @@ use Syriable\Messenger\Contracts\PreSendPipe;
 use Syriable\Messenger\Events\ConversationArchived;
 use Syriable\Messenger\Events\ConversationCleared;
 use Syriable\Messenger\Events\ConversationMarkedAsRead;
+use Syriable\Messenger\Events\ConversationSpammed;
+use Syriable\Messenger\Events\ConversationStarred;
+use Syriable\Messenger\Events\ConversationUnspammed;
+use Syriable\Messenger\Events\ConversationUnstarred;
+use Syriable\Messenger\Events\MessageReported;
 use Syriable\Messenger\Events\MessageSent;
 use Syriable\Messenger\Listeners\BroadcastConversationArchived;
 use Syriable\Messenger\Listeners\BroadcastConversationCleared;
 use Syriable\Messenger\Listeners\BroadcastConversationMarkedAsRead;
+use Syriable\Messenger\Listeners\BroadcastConversationSpammed;
+use Syriable\Messenger\Listeners\BroadcastConversationStarred;
+use Syriable\Messenger\Listeners\BroadcastConversationUnspammed;
+use Syriable\Messenger\Listeners\BroadcastConversationUnstarred;
+use Syriable\Messenger\Listeners\BroadcastMessageReported;
 use Syriable\Messenger\Listeners\BroadcastMessageSent;
 use Syriable\Messenger\Pipelines\PreSend\EnsureMessagingAllowedPipe;
 use Syriable\Messenger\Pipelines\PreSend\ValidateAttachmentsPipe;
@@ -81,8 +91,13 @@ class MessengerServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         Event::listen(MessageSent::class, BroadcastMessageSent::class);
+        Event::listen(MessageReported::class, BroadcastMessageReported::class);
         Event::listen(ConversationArchived::class, BroadcastConversationArchived::class);
         Event::listen(ConversationMarkedAsRead::class, BroadcastConversationMarkedAsRead::class);
         Event::listen(ConversationCleared::class, BroadcastConversationCleared::class);
+        Event::listen(ConversationStarred::class, BroadcastConversationStarred::class);
+        Event::listen(ConversationUnstarred::class, BroadcastConversationUnstarred::class);
+        Event::listen(ConversationSpammed::class, BroadcastConversationSpammed::class);
+        Event::listen(ConversationUnspammed::class, BroadcastConversationUnspammed::class);
     }
 }

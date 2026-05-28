@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Event;
 use Syriable\Messenger\Actions\ArchiveConversationAction;
 use Syriable\Messenger\Actions\ClearConversationAction;
 use Syriable\Messenger\Actions\SendMessageAction;
+use Syriable\Messenger\Actions\StarConversationAction;
 use Syriable\Messenger\Data\InboxFilters;
 use Syriable\Messenger\Data\SendMessageData;
 use Syriable\Messenger\Events\MessageSent;
@@ -108,4 +109,23 @@ it('filters archived conversations when requested', function () {
 
     expect(app(GetInboxConversationsQuery::class)->execute($alice))->toHaveCount(0)
         ->and(app(GetInboxConversationsQuery::class)->execute($alice, new InboxFilters(archived: true)))->toHaveCount(1);
+});
+
+it('filters starred conversations when requested', function () {
+    $alice = Participant::query()->create(['name' => 'Alice']);
+    $bob = Participant::query()->create(['name' => 'Bob']);
+    $carol = Participant::query()->create(['name' => 'Carol']);
+
+    $send = app(SendMessageAction::class);
+
+    $send->execute(new SendMessageData(sender: $alice, recipient: $bob, body: 'Bob thread'));
+    $send->execute(new SendMessageData(sender: $alice, recipient: $carol, body: 'Carol thread'));
+
+    $bobConversation = app(ConversationResolver::class)->findForPair($alice, $bob);
+
+    app(StarConversationAction::class)->execute($bobConversation, $alice);
+
+    expect(app(GetInboxConversationsQuery::class)->execute($alice))->toHaveCount(2)
+        ->and(app(GetInboxConversationsQuery::class)->execute($alice, new InboxFilters(starred: true)))->toHaveCount(1)
+        ->and(app(GetInboxConversationsQuery::class)->execute($alice, new InboxFilters(starred: false)))->toHaveCount(1);
 });

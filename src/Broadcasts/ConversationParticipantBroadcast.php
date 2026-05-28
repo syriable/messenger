@@ -60,6 +60,8 @@ final class ConversationParticipantBroadcast implements ShouldBroadcast
                 'unread_count' => $this->participant->unread_count,
                 'archived_at' => $this->participant->archived_at?->toIso8601String(),
                 'starred_at' => $this->participant->starred_at?->toIso8601String(),
+                'blocked_at' => $this->participant->blocked_at?->toIso8601String(),
+                'spammed_at' => $this->participant->spammed_at?->toIso8601String(),
                 'cleared_at' => $this->participant->cleared_at?->toIso8601String(),
             ],
             'actor' => [
