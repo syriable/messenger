@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Syriable\Messenger\Actions;
 
 use Illuminate\Database\Eloquent\Model;
+use Syriable\Messenger\Events\ConversationBlocked;
 use Syriable\Messenger\Models\Conversation;
 use Syriable\Messenger\Models\ConversationParticipant;
 use Syriable\Messenger\Services\ConversationResolver;
@@ -22,6 +23,8 @@ final class BlockConversationAction
         $participantRow->update([
             'blocked_at' => now(),
         ]);
+
+        ConversationBlocked::dispatch($conversation, $participantRow, $participant);
 
         return $participantRow->refresh();
     }

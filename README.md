@@ -2,7 +2,7 @@
 
 Headless, Laravel-native one-to-one messaging for morphable participants. No UI, routes, or policies — actions, queries, pipelines, and events only.
 
-> **Status:** `v0.1.x` — core domain on `cursor/feat-core-domain`. API may evolve before `1.0`.
+> **Status:** `v0.1.0` — foundation release. API may evolve before `1.0`.
 
 ## Requirements
 
@@ -150,7 +150,7 @@ Required pipes (cannot be removed; config may only **append**):
 Past-tense events for application listeners (cache, notifications, analytics). Broadcasting is separate — see below.
 
 - `MessageSent`, `MessageReported`
-- `ConversationArchived`, `ConversationMarkedAsRead`, `ConversationCleared`
+- `ConversationArchived`, `ConversationBlocked`, `ConversationMarkedAsRead`, `ConversationCleared`
 - `ConversationStarred`, `ConversationUnstarred`, `ConversationSpammed`, `ConversationUnspammed`
 
 ## Broadcasting (optional)
