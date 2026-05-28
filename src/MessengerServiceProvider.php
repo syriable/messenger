@@ -8,8 +8,11 @@ use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Syriable\Messenger\Contracts\PreSendPipe;
 use Syriable\Messenger\Pipelines\PreSend\EnsureMessagingAllowedPipe;
+use Syriable\Messenger\Pipelines\PreSend\ValidateAttachmentsPipe;
 use Syriable\Messenger\Pipelines\PreSend\ValidateMessageContentPipe;
 use Syriable\Messenger\Pipelines\PreSendPipeline;
+use Syriable\Messenger\Services\AttachmentStorage;
+use Syriable\Messenger\Services\AttachmentValidator;
 use Syriable\Messenger\Services\ConversationResolver;
 
 class MessengerServiceProvider extends PackageServiceProvider
@@ -21,6 +24,7 @@ class MessengerServiceProvider extends PackageServiceProvider
      */
     private const REQUIRED_PRE_SEND_PIPES = [
         ValidateMessageContentPipe::class,
+        ValidateAttachmentsPipe::class,
         EnsureMessagingAllowedPipe::class,
     ];
 
@@ -46,6 +50,10 @@ class MessengerServiceProvider extends PackageServiceProvider
         $this->app->alias('messenger', MessengerManager::class);
 
         $this->app->singleton(ConversationResolver::class);
+
+        $this->app->singleton(AttachmentValidator::class);
+
+        $this->app->singleton(AttachmentStorage::class);
 
         $this->app->singleton(PreSendPipeline::class, function ($app): PreSendPipeline {
             /** @var list<class-string<PreSendPipe>> $extra */

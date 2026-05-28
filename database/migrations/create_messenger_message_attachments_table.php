@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('mime_type');
             $table->unsignedBigInteger('size_bytes');
 
-            $table->timestamp('created_at', 6);
+            $table->timestamp('created_at');
 
             $table->index('message_id');
         });

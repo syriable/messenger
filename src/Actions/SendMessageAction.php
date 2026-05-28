@@ -10,6 +10,7 @@ use Syriable\Messenger\Events\MessageSent;
 use Syriable\Messenger\Exceptions\InvalidMessageException;
 use Syriable\Messenger\Models\Message;
 use Syriable\Messenger\Pipelines\PreSendPipeline;
+use Syriable\Messenger\Services\AttachmentStorage;
 use Syriable\Messenger\Services\ConversationResolver;
 
 final class SendMessageAction
@@ -17,6 +18,7 @@ final class SendMessageAction
     public function __construct(
         private readonly PreSendPipeline $preSendPipeline,
         private readonly ConversationResolver $conversationResolver,
+        private readonly AttachmentStorage $attachmentStorage,
     ) {}
 
     public function execute(SendMessageData $data): Message
@@ -57,6 +59,12 @@ final class SendMessageAction
                     'unread_count' => $recipientParticipant->unread_count + 1,
                     'manually_marked_unread_at' => null,
                 ]);
+
+                if ($data->hasAttachments()) {
+                    $this->attachmentStorage->storeForMessage($message, $data->attachments);
+                }
+
+                $message->load(['attachments']);
 
                 MessageSent::dispatch($message, $conversation, $data->sender, $data->recipient);
 

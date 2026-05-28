@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Syriable\Messenger\Data;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\UploadedFile;
 
 final readonly class SendMessageData
 {
     /**
-     * @param  list<mixed>  $attachments  Attachment payloads (handled by attachment layer).
+     * @param  list<UploadedFile>  $attachments
      */
     public function __construct(
         public Model $sender,
