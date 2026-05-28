@@ -21,7 +21,7 @@ return new class extends Migration
 
             // Denormalized inbox ordering (latest message activity only).
             $table->ulid('latest_message_id')->nullable();
-            $table->timestamp('latest_message_at', 6)->nullable();
+            $table->timestamp('latest_message_at')->nullable();
 
             $table->timestamps();
 

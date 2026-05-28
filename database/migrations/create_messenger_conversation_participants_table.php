@@ -25,11 +25,11 @@ return new class extends Migration
             $table->morphs('participant');
 
             // Participant-specific conversation state.
-            $table->timestamp('archived_at', 6)->nullable();
-            $table->timestamp('starred_at', 6)->nullable();
-            $table->timestamp('blocked_at', 6)->nullable();
-            $table->timestamp('spammed_at', 6)->nullable();
-            $table->timestamp('cleared_at', 6)->nullable();
+            $table->timestamp('archived_at')->nullable();
+            $table->timestamp('starred_at')->nullable();
+            $table->timestamp('blocked_at')->nullable();
+            $table->timestamp('spammed_at')->nullable();
+            $table->timestamp('cleared_at')->nullable();
 
             // Unread tracking (denormalized counter for performance).
             $table->unsignedInteger('unread_count')->default(0);
@@ -40,7 +40,7 @@ return new class extends Migration
                 ->nullOnDelete();
 
             // When set, only the last received message counts as unread.
-            $table->timestamp('manually_marked_unread_at', 6)->nullable();
+            $table->timestamp('manually_marked_unread_at')->nullable();
 
             $table->timestamps();
 

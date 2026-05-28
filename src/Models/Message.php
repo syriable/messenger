@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Syriable\Messenger\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +31,7 @@ class Message extends Model
 
     protected $guarded = [];
 
-    protected $dateFormat = 'Y-m-d H:i:s.u';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     protected function casts(): array
     {
@@ -87,5 +88,18 @@ class Message extends Model
         return $this->relationLoaded('attachments')
             ? $this->attachments->isNotEmpty()
             : $this->attachments()->exists();
+    }
+
+    /**
+     * @param  Builder<Message>  $query
+     * @return Builder<Message>
+     */
+    public function scopeVisibleToParticipant(Builder $query, ConversationParticipant $participant): Builder
+    {
+        if ($participant->cleared_at === null) {
+            return $query;
+        }
+
+        return $query->where($query->qualifyColumn('created_at'), '>', $participant->cleared_at);
     }
 }

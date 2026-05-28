@@ -32,7 +32,7 @@ return new class extends Migration
                 ->nullOnDelete();
 
             // Immutable messages — business time only.
-            $table->timestamp('created_at', 6);
+            $table->timestamp('created_at');
 
             $table->index(['conversation_id', 'created_at']);
         });
